@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: StatefulSet        # em vez de Deployment
+metadata:
+  name: postgres
+  namespace: project
+spec:
+  serviceName: "postgres"  # novidade — precisa de um Service headless vinculado
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: "postgres"
+            - name: POSTGRES_USER
+              value: "postgres"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:       # senha vem do Secret
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:       # aqui definimos o PVC que será criado para cada réplica
+    - metadata:
+        name: postgres-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: ""
+        resources:
+          requests:
+            storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: project
+spec:
+  clusterIP: None      # isso é o que o torna "headless"
+  selector:
+    app: postgres
+  ports:
+    - port: 5432
+      targetPort: 5432
