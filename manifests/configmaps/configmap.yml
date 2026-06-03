@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: laboratorio
+data:
+  APP_ENV: "producao"
+  APP_LOG_LEVEL: "info"
+  APP_PORT: "8080"

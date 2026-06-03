@@ -1,0 +1,10 @@
+services:
+  jekyll:
+    command: sh -c "bundle install && bundle exec jekyll serve --force_polling --host 0.0.0.0 --livereload -t --baseurl=''"
+    image: ruby:3.4
+    working_dir: /srv/jekyll
+    ports:
+      - 127.0.0.1:4000:4000
+      - 127.0.0.1:35729:35729
+    volumes:
+      - .:/srv/jekyll

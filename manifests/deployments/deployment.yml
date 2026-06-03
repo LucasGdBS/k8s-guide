@@ -1,0 +1,24 @@
+# Deployment garante que N réplicas do Pod estejam sempre rodando
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deployment
+  namespace: laboratorio
+  labels:
+    app: web
+    aula: "03-deployments"
+spec:
+  replicas: 3                  # quantos Pods queremos
+  selector:
+    matchLabels:
+      app: web                 # o Deployment gerencia Pods com esse label
+  template:                    # template do Pod que será criado
+    metadata:
+      labels:
+        app: web               # deve bater com o selector acima
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:alpine
+          ports:
+            - containerPort: 80

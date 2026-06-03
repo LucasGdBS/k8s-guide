@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-storage
+  namespace: laboratorio
+spec:
+  containers:
+    - name: app
+      image: alpine
+      command: ["sleep", "infinity"]
+      volumeMounts:
+        - name: meu-volume
+          mountPath: /dados         # pasta dentro do container
+  volumes:
+    - name: meu-volume
+      persistentVolumeClaim:
+        claimName: pvc-lab          # referencia o PVC pelo nome

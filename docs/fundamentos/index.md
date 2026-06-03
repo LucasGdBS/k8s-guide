@@ -1,0 +1,15 @@
+---
+title: Fundamentos
+nav_order: 2
+has_children: true
+---
+
+# Fundamentos
+
+Conceitos base do Kubernetes: arquitetura, workloads essenciais e como interagir com o cluster via `kubectl`.
+
+| Aula | Tópico |
+|------|--------|
+| 01 | Arquitetura do K8s + primeiro cluster Kind |
+| 02 | Pods |
+| 03 | Deployments |

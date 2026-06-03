@@ -1,0 +1,91 @@
+# App 1 — nginx
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-nginx
+  namespace: laboratorio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-nginx
+  template:
+    metadata:
+      labels:
+        app: app-nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:alpine
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-nginx
+  namespace: laboratorio
+spec:
+  selector:
+    app: app-nginx
+  ports:
+    - port: 80
+      targetPort: 80
+---
+# App 2 — httpd
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-httpd
+  namespace: laboratorio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-httpd
+  template:
+    metadata:
+      labels:
+        app: app-httpd
+    spec:
+      containers:
+        - name: httpd
+          image: httpd:alpine
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-httpd
+  namespace: laboratorio
+spec:
+  selector:
+    app: app-httpd
+  ports:
+    - port: 80
+      targetPort: 80
+---
+# Ingress — roteia /nginx e /httpd para os Servic
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lab-ingress
+  namespace: laboratorio
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /nginx(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: svc-nginx
+                port:
+                  number: 80
+          - path: /httpd(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: svc-httpd
+                port:
+                  number: 80

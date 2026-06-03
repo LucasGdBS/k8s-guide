@@ -1,0 +1,27 @@
+title: Learning K8s
+description: A learning path for Kubernetes
+
+remote_theme: just-the-docs/just-the-docs
+
+# url: 
+baseurl: /learning-k8s/
+
+color_scheme: dark
+
+search_enabled: true
+heading_anchors: true
+
+footer_content: "K8s Learning Path - 2026 by LucasGdbs"
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
+
+plugins:
+  - jekyll-remote-theme
+  - jekyll-seo-tag
+  - jekyll-include-cache
+  - jekyll-feed
+  - jekyll-relative-links

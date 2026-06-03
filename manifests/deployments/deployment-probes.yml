@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-probes
+  namespace: laboratorio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-probes
+  template:
+    metadata:
+      labels:
+        app: web-probes
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:alpine
+          ports:
+            - containerPort: 80
+
+          startupProbe:
+            httpGet:
+              path: /
+              port: 80
+            failureThreshold: 30   # tenta 30 vezes antes de desistir
+            periodSeconds: 2       # a cada 2 segundos
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5  # aguarda 5s antes de começar
+            periodSeconds: 10       # verifica a cada 10s
+            failureThreshold: 3     # reinicia após 3 falhas consecutivas
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            failureThreshold: 3     # remove do Service após 3 falhas

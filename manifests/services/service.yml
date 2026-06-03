@@ -1,0 +1,17 @@
+# Service do tipo ClusterIP — expõe o Deployment internamente no cluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+  namespace: laboratorio
+  labels:
+    app: web
+    aula: "04-services"
+spec:
+  type: NodePort
+  selector:
+    app: web               # seleciona todos os Pods com esse label
+  ports:
+    - port: 80             # porta do Service
+      targetPort: 80  
+      nodePort: 30080     # porta do container

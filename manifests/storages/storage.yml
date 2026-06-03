@@ -1,0 +1,27 @@
+# PersistentVolume — representa o disco físico disponível no cluster
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-lab
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce        # apenas um node pode montar para leitura/escrita
+  storageClassName: ""
+  hostPath:
+    path: /tmp/pv-lab      # no Kind, usamos hostPath (disco local do node)
+---
+# PersistentVolumeClaim — o Pod solicita armazenamento
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-lab
+  namespace: laboratorio
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 500Mi       # pede 500Mi do PV de 1Gi disponível

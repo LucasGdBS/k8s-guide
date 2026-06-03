@@ -1,0 +1,15 @@
+# Um Pod simples rodando nginx — servidor web leve, ótimo pra testes
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-exercicio
+  namespace: laboratorio
+  labels:
+    app: httpd
+    aula: "02-pods"
+spec:
+  containers:
+    - name: httpd
+      image: httpd:alpine    # versão leve do httpd
+      ports:
+        - containerPort: 80  # porta que o container expõe
