@@ -22,3 +22,4 @@ Conceitos base do Kubernetes: arquitetura, workloads essenciais e como interagir
 | 10 | StatefulSets |
 | 11 | Jobs e CronJobs |
 | 12 | Helm |
+| 13 | DaemonSets |

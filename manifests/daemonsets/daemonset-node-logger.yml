@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: node-logger
+  namespace: laboratorio
+  labels:
+    app: node-logger
+    aula: "13-daemonsets"
+spec:
+  selector:
+    matchLabels:
+      app: node-logger
+  template:
+    metadata:
+      labels:
+        app: node-logger
+    spec:
+      tolerations:
+        # permite rodar no control-plane, que por padrão rejeita pods comuns
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+      containers:
+        - name: logger
+          image: busybox
+          command:
+            - sh
+            - -c
+            - 'while true; do echo "rodando no no $NODE_NAME em: $(date)"; sleep 5; done'
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName  # injeta o nome do nó como variável de ambiente
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "16Mi"
+            limits:
+              cpu: "50m"
+              memory: "32Mi"

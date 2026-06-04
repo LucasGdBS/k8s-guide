@@ -16,3 +16,4 @@ nodes:
       - containerPort: 443  # mapeia porta 443 do node para porta 443 do host
         hostPort: 443
         protocol: TCP
+  - role: worker  # nó worker — receberá pods normais e pods do DaemonSet
