@@ -1,0 +1,35 @@
+# Job: executa uma tarefa até completar com sucesso e encerra.
+# Diferente de um Deployment, o pod NÃO é reiniciado após completar.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migration-job
+  namespace: laboratorio
+  labels:
+    app: migration-job
+    aula: "11-jobs"
+spec:
+  # número de vezes que o Job tenta em caso de falha
+  backoffLimit: 3
+
+  # tempo máximo em segundos antes de desistir (opcional)
+  activeDeadlineSeconds: 60
+
+  template:
+    spec:
+      # Never: o pod não reinicia automaticamente — o Job controla as tentativas
+      restartPolicy: Never
+      containers:
+        - name: migration
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              echo "Iniciando migration..."
+              sleep 3
+              echo "Criando tabela usuarios..."
+              sleep 2
+              echo "Criando tabela pedidos..."
+              sleep 2
+              echo "Migration concluída com sucesso!"

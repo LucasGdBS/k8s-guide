@@ -1,0 +1,45 @@
+# CronJob: cria Jobs automaticamente no horário definido.
+# O formato do schedule é o cron padrão do Unix:
+# ┌── minuto (0-59)
+# │ ┌── hora (0-23)
+# │ │ ┌── dia do mês (1-31)
+# │ │ │ ┌── mês (1-12)
+# │ │ │ │ ┌── dia da semana (0-7, domingo=0 ou 7)
+# │ │ │ │ │
+# * * * * *
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backup-cronjob
+  namespace: laboratorio
+  labels:
+    app: backup-cronjob
+    aula: "11-jobs"
+spec:
+  schedule: "* * * * *"  # todo minuto (útil para testar)
+
+  # quantos Jobs completados manter para consulta de logs
+  successfulJobsHistoryLimit: 3
+
+  # quantos Jobs com falha manter
+  failedJobsHistoryLimit: 1
+
+  # se o horário passou e o Job não rodou, ainda tenta? (ex: cluster estava down)
+  concurrencyPolicy: Forbid  # não roda novo Job se o anterior ainda estiver rodando
+
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: backup
+              image: busybox
+              command:
+                - sh
+                - -c
+                - |
+                  echo "Iniciando backup - $(date)"
+                  sleep 5
+                  echo "Backup concluído!"

@@ -1,0 +1,56 @@
+# StatefulSet: gerencia pods com identidade fixa e volume próprio por pod.
+# Cada pod recebe: nome fixo (app-0, app-1...), DNS próprio e um PVC exclusivo.
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: demo-sts
+  namespace: laboratorio
+  labels:
+    app: demo-sts
+    aula: "10-statefulsets"
+spec:
+  serviceName: demo-sts  # deve bater com o nome do Headless Service
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: demo-sts
+
+  template:
+    metadata:
+      labels:
+        app: demo-sts
+    spec:
+      containers:
+        - name: app
+          image: busybox
+          # ao iniciar, escreve o próprio nome no volume e fica em loop
+          command:
+            - sh
+            - -c
+            - |
+              echo "Sou o pod $POD_NAME" > /dados/identidade.txt
+              echo "Criado em $(date)" >> /dados/identidade.txt
+              # mantém o container vivo
+              while true; do sleep 3600; done
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name  # K8s injeta o nome do pod aqui
+          volumeMounts:
+            - name: dados
+              mountPath: /dados
+
+  # volumeClaimTemplates: cria um PVC exclusivo para cada pod automaticamente.
+  # pod app-0 → PVC dados-app-0
+  # pod app-1 → PVC dados-app-1
+  # pod app-2 → PVC dados-app-2
+  volumeClaimTemplates:
+    - metadata:
+        name: dados
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 50Mi
