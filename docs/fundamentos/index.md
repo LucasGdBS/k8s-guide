@@ -21,3 +21,4 @@ Conceitos base do Kubernetes: arquitetura, workloads essenciais e como interagir
 | 09 | RBAC |
 | 10 | StatefulSets |
 | 11 | Jobs e CronJobs |
+| 12 | Helm |
