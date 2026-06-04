@@ -19,3 +19,5 @@ Conceitos base do Kubernetes: arquitetura, workloads essenciais e como interagir
 | 07 | Volumes e Armazenamento |
 | 08 | Observabilidade |
 | 09 | RBAC |
+| 10 | StatefulSets |
+| 11 | Jobs e CronJobs |

@@ -1,0 +1,18 @@
+# Headless Service: clusterIP: None faz o K8s criar um DNS individual
+# para cada pod ao invés de um único IP de balanceamento.
+# Resultado: app-0.demo-sts, app-1.demo-sts, app-2.demo-sts
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-sts
+  namespace: laboratorio
+  labels:
+    app: demo-sts
+    aula: "10-statefulsets"
+spec:
+  clusterIP: None        # isso é o que o torna "headless"
+  selector:
+    app: demo-sts
+  ports:
+    - port: 80
+      name: web
