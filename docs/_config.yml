@@ -4,7 +4,7 @@ description: A learning path for Kubernetes
 remote_theme: just-the-docs/just-the-docs
 
 # url: 
-baseurl: /learning-k8s/
+baseurl: /k8s-guide
 
 color_scheme: dark
 
