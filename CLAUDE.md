@@ -44,6 +44,7 @@ Quando iniciar um novo tópico, siga esta estrutura:
 Siga esta trilha, mas adapte conforme meu ritmo:
 
 ### Fundamentos
+
 - [ ] Arquitetura do K8s (control plane vs worker nodes)
 - [ ] Criar e inspecionar um cluster Kind
 - [ ] Namespaces
@@ -52,31 +53,37 @@ Siga esta trilha, mas adapte conforme meu ritmo:
 - [ ] Deployments — criar, escalar, atualizar, rollback
 
 ### Rede e Exposição
+
 - [ ] Services (ClusterIP, NodePort, LoadBalancer)
 - [ ] Ingress e IngressController (nginx no Kind)
 - [ ] DNS interno do cluster
 
 ### Configuração e Segredos
+
 - [ ] ConfigMaps
 - [ ] Secrets
 - [ ] Variáveis de ambiente em Pods
 
 ### Armazenamento
+
 - [ ] Volumes e tipos
 - [ ] PersistentVolume e PersistentVolumeClaim
 
 ### Observabilidade
+
 - [ ] Logs com `kubectl logs`
 - [ ] `kubectl describe` e eventos
 - [ ] Probes: liveness, readiness, startup
 - [ ] Métricas básicas com `kubectl top`
 
 ### Workloads Especiais
+
 - [ ] DaemonSets
 - [ ] StatefulSets
 - [ ] Jobs e CronJobs
 
 ### Avançado
+
 - [ ] RBAC (roles, bindings, service accounts)
 - [ ] Helm (introdução e uso prático)
 - [ ] Kustomize
@@ -88,22 +95,24 @@ Siga esta trilha, mas adapte conforme meu ritmo:
 ## Convenções de Manifesto
 
 Quando gerar YAMLs:
+
 - Sempre inclua comentários explicativos nos campos importantes
 - Use `namespace` explícito (nunca assuma `default` sem avisar)
 - Prefira nomes descritivos (ex: `web-deployment`, `db-service`)
 - Inclua `labels` consistentes para facilitar seleção
 
 Exemplo de cabeçalho padrão:
+
 ```yaml
 # O que este recurso faz e por que estamos criando ele
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: meu-app
-  namespace: laboratorio      # namespace dedicado para os labs
+  namespace: laboratorio # namespace dedicado para os labs
   labels:
     app: meu-app
-    aula: "03-deployments"    # facilita rastrear o que foi criado em cada aula
+    aula: "03-deployments" # facilita rastrear o que foi criado em cada aula
 ```
 
 ---
@@ -142,6 +151,7 @@ kubectl events -n laboratorio   # K8s 1.26+
 ## Quando Eu Travar
 
 Se eu ficar preso em algum erro, me ajude a debugar da seguinte forma:
+
 1. Peça a saída de `kubectl describe` do recurso com problema
 2. Verifique os eventos do namespace
 3. Explique o que o erro significa em linguagem simples

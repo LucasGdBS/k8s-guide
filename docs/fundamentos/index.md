@@ -13,3 +13,9 @@ Conceitos base do Kubernetes: arquitetura, workloads essenciais e como interagir
 | 01 | Arquitetura do K8s + primeiro cluster Kind |
 | 02 | Pods |
 | 03 | Deployments |
+| 04 | Services |
+| 05 | Ingress |
+| 06 | ConfigMaps e Secrets |
+| 07 | Volumes e Armazenamento |
+| 08 | Observabilidade |
+| 09 | RBAC |
