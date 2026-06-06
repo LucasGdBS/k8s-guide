@@ -1,0 +1,28 @@
+# Permite que APENAS o backend acesse o banco de dados
+# Regra: só entra no namespace "database" quem vem do namespace "backend"
+#        E somente pods com label app=backend
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-backend-to-database
+  namespace: database  # esta política controla quem ENTRA no namespace database
+  labels:
+    aula: "15-network-policies"
+spec:
+  podSelector:
+    matchLabels:
+      app: database  # aplica apenas aos pods com este label
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              role: backend  # só aceita tráfego vindo do namespace com label role=backend
+          podSelector:
+            matchLabels:
+              app: backend   # E somente de pods com label app=backend
+                             # namespaceSelector + podSelector na mesma regra = AND lógico
+      ports:
+        - protocol: TCP
+          port: 80

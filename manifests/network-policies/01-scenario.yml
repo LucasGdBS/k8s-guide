@@ -1,0 +1,88 @@
+# Cenário do lab: frontend → backend → banco de dados
+# Criamos 3 aplicações em namespaces separados para testar isolamento de rede
+---
+# Namespace para o frontend
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: frontend
+  labels:
+    role: frontend  # label no namespace para uso com namespaceSelector
+---
+# Namespace para o backend
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: backend
+  labels:
+    role: backend
+---
+# Namespace para o banco de dados
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: database
+  labels:
+    role: database
+---
+# Pod frontend — simula a camada web
+apiVersion: v1
+kind: Pod
+metadata:
+  name: frontend
+  namespace: frontend
+  labels:
+    app: frontend
+    tier: web
+spec:
+  containers:
+    - name: frontend
+      image: nginx:alpine
+      ports:
+        - containerPort: 80
+---
+# Pod backend — simula a API
+apiVersion: v1
+kind: Pod
+metadata:
+  name: backend
+  namespace: backend
+  labels:
+    app: backend
+    tier: api
+spec:
+  containers:
+    - name: backend
+      image: nginx:alpine
+      ports:
+        - containerPort: 80
+---
+# Pod banco de dados — simula o postgres/mysql
+apiVersion: v1
+kind: Pod
+metadata:
+  name: database
+  namespace: database
+  labels:
+    app: database
+    tier: db
+spec:
+  containers:
+    - name: database
+      image: nginx:alpine  # usando nginx para simular; em prod seria postgres etc.
+      ports:
+        - containerPort: 80
+---
+# Pod "intruso" no namespace frontend — para testar que não passa pela NetworkPolicy
+apiVersion: v1
+kind: Pod
+metadata:
+  name: intruso
+  namespace: frontend
+  labels:
+    app: intruso  # label diferente — não tem permissão
+spec:
+  containers:
+    - name: intruso
+      image: curlimages/curl:latest
+      command: ["sleep", "3600"]  # fica vivo para podermos executar curl manualmente

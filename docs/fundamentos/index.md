@@ -23,3 +23,6 @@ Conceitos base do Kubernetes: arquitetura, workloads essenciais e como interagir
 | 11 | Jobs e CronJobs |
 | 12 | Helm |
 | 13 | DaemonSets |
+| 14 | Kustomize |
+| 15 | NetworkPolicies |
+| 16 | Multi-node Cluster com Kind *(opcional)* |

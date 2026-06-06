@@ -1,0 +1,24 @@
+# Exemplo de controle de SAÍDA (Egress)
+# Restringe o banco de dados a só poder iniciar conexões para dentro do cluster
+# e para o DNS (porta 53) — necessário para resolução de nomes
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: database-egress-restriction
+  namespace: database
+  labels:
+    aula: "15-network-policies"
+spec:
+  podSelector:
+    matchLabels:
+      app: database
+  policyTypes:
+    - Egress
+  egress:
+    - ports:
+        - protocol: UDP
+          port: 53   # DNS — sempre libere isso ou os pods perdem resolução de nomes
+        - protocol: TCP
+          port: 53
+    # Sem outras regras de egress = banco não inicia conexões para fora
+    # (apenas responde conexões de entrada que foram abertas pelo backend)

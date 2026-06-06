@@ -1,0 +1,26 @@
+# Permite que o frontend acesse o backend
+# E bloqueia tráfego direto do frontend para o banco de dados (já coberto pelo deny-all no database)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-frontend-to-backend
+  namespace: backend
+  labels:
+    aula: "15-network-policies"
+spec:
+  podSelector:
+    matchLabels:
+      app: backend
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              role: frontend
+          podSelector:
+            matchLabels:
+              app: frontend  # somente o pod "frontend", não o "intruso"
+      ports:
+        - protocol: TCP
+          port: 80

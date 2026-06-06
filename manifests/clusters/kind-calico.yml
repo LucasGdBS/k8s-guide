@@ -1,0 +1,10 @@
+# Cluster Kind sem CNI padrão (kindnet desabilitado)
+# Necessário para instalar o Calico, que suporta NetworkPolicy
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+networking:
+  disableDefaultCNI: true  # desabilita kindnet para usar Calico
+  podSubnet: "192.168.0.0/16"  # Calico usa esta subnet por padrão
+nodes:
+  - role: control-plane
+  - role: worker

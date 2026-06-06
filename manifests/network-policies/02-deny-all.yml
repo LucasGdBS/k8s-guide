@@ -1,0 +1,15 @@
+# Política "deny-all" — bloqueia TODO tráfego de entrada no namespace database
+# Esta é a base: primeiro feche tudo, depois abra apenas o necessário
+# Boa prática: sempre comece pelo deny-all e libere seletivamente
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all-ingress
+  namespace: database
+  labels:
+    aula: "15-network-policies"
+spec:
+  podSelector: {}  # {} = aplica a TODOS os pods do namespace
+  policyTypes:
+    - Ingress      # controla tráfego de ENTRADA
+  # Sem regras de ingress = ninguém entra
